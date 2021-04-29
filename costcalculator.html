@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Flippin Stickers Cost Calculator</title>
+    <link rel="stylesheet" type="text/css"
+     href="css/style.css">
+</head>
+<body>
+    <div class="container">
+	    <h1>Price Calculator</h1>
+        <div class="box-1">
+			<form class="my-form">
+				<div class="form-group">
+					<label>Enter sticker height (in inches): </label>
+					<input id="height" type="number" value='3'>
+				</div>
+				<div class="form-group">
+					<label>Enter sticker width (in inches): </label>
+					<input id="width" type="number" value='3'>
+				</div>
+				<div class="form-group">
+					<label>Enter sticker quantity: </label>
+					<input id="quantity" type="number" value='10'>
+				</div>
+				<input class="button" type="button" value="Submit" onclick="calcPrices()">
+			</form>
+		</div>
+		<div class="box-2">
+			<h2 id="totalPrice"</h2>
+			<!--<p id="singlePrice"></p>
+			<p id="calcSqIn"></p>
+			<p id="totalPriceShipped"></p>-->
+		</div>
+    </div>
+</body>
+
+<script>
+// calculate the prices
+function calcPrices() {
+    var inputHeight = 0;
+	var inputWidth = 0;
+	var inputQty = 0;
+	var sqInches = 0;
+	var totalPrice = 0;
+	var totalPriceShipped = 0;
+	var inSQ = "2"
+	var myRow = 0;
+	var myPrice = 0;
+	var shipping = 10;
+	
+	clearHighlight() //remove any previous highlighting
+	
+	inputHeight = Number(document.getElementById("height").value);
+	inputWidth = Number(document.getElementById("width").value);
+	inputQty = Number(document.getElementById("quantity").value);
+
+	if (isNaN(inputHeight) || inputHeight < 1 || inputHeight > 36) {
+		text = "Invalid Height";
+	}
+	else if (isNaN(inputWidth) || inputWidth < 1 || inputWidth > 36){
+		text = "Invalid Width";
+	} 
+	else if (isNaN(inputQty) || inputQty < 1 || inputQty > 10000){
+		text = "Invalid Quantity";
+	}
+	else {
+	myRow = findSquareInches(inputHeight, inputWidth);
+	myPrice = getPriceByQty(inputQty,myRow);
+	totalPrice = Number(myPrice.replace("$","")) * Number(inputQty);
+	totalPrice = totalPrice + shipping ;
+	sqInches = inputHeight * inputWidth ;
+	<!--totalPriceShipped = totalPrice + shipping ;-->
+	
+	}
+
+    document.getElementById("totalPrice").innerHTML = "Total Price (includes shipping): $" + totalPrice.toFixed(2);
+    document.getElementById("singlePrice").innerHTML = myPrice + " each";
+    document.getElementById("calcSqIn").innerHTML = "Sticker size: " + sqInches + " in" + inSQ.sup();
+	<!--document.getElementById("totalPriceShipped").innerHTML = "Total Price: $" + totalPriceShipped.toFixed(2);-->
+
+}
+//get the cost based on quantity
+function getPriceByQty(qty, myRow) {
+    var colCost = 0;
+	var elementId = "";
+	
+
+	elementId = myRow + "x";
+	
+// find the column based on quantity
+	if (qty < 10) {
+	elementId = elementId + "1";
+	colCost = document.getElementById(elementId).innerHTML;
+	}
+	else if (qty >= 10 && qty <= 19) {
+	elementId = elementId + "2";
+	colCost = document.getElementById(elementId).innerHTML;
+	}
+	else if (qty >= 20 && qty <= 29) {
+	elementId = elementId + "3";
+	colCost = document.getElementById(elementId).innerHTML;
+	}
+	else if (qty >= 30 && qty <= 49) {
+	elementId = elementId + "4";
+	colCost = document.getElementById(elementId).innerHTML;
+	}
+	else if (qty >= 50 && qty <= 99) {
+	elementId = elementId + "5";
+	colCost = document.getElementById(elementId).innerHTML;
+	}
+	else if (qty >= 100 && qty <= 249) {
+	elementId = elementId + "6";
+	colCost = document.getElementById(elementId).innerHTML;
+	}
+	else if (qty >= 250 && qty <= 499) {
+	elementId = elementId + "7";
+	colCost = document.getElementById(elementId).innerHTML;
+	}
+	else if (qty >= 500 && qty <= 999) {
+	elementId = elementId + "8";
+	colCost = document.getElementById(elementId).innerHTML;
+	}
+	else if (qty >= 1000 && qty <= 1999) {
+	elementId = elementId + "9";
+	colCost = document.getElementById(elementId).innerHTML;
+	}
+	else if (qty >= 2000 && qty <= 4999) {
+	elementId = elementId + "10";
+	colCost = document.getElementById(elementId).innerHTML;
+	}
+	else if (qty >= 5000 && qty <= 9999) {
+	elementId = elementId + "11";
+	colCost = document.getElementById(elementId).innerHTML;
+	}
+	else if (qty >= 10000) {
+	elementId = elementId + "12";
+	colCost = document.getElementById(elementId).innerHTML;
+	}
+	return colCost;
+}
+// round up to nearest square inch
+function findSquareInches(height, width){
+	var sqInches = 0;
+	var bgHighlightColor = "#ffff00";
+	var myRow = "";
+	
+	sqInches = height * width;
+	
+	if (sqInches >= 1 && sqInches <= 4) {
+	  //then highlight 4 sq inches
+	document.getElementById("4inches").style.background = bgHighlightColor;
+	myRow = "4";
+	}	
+	else if (sqInches >4 && sqInches <= 9) {
+	  //then highlight 9 sq inches
+	document.getElementById("9inches").style.background = bgHighlightColor;
+	myRow = "9";
+	}
+	else if (sqInches >9 && sqInches <= 16) {
+	  //then highlight 16 sq inches
+	document.getElementById("16inches").style.background = bgHighlightColor;
+	myRow = "16";
+	}
+	else if (sqInches >16 && sqInches <= 25) {
+	  //then highlight 25 sq inches
+	document.getElementById("25inches").style.background = bgHighlightColor;
+	myRow = "25";
+	}
+	else if (sqInches >25 && sqInches <= 36) {
+	  //then highlight 36 sq inches
+	document.getElementById("36inches").style.background = bgHighlightColor;
+	myRow = "36";
+	}
+	else if (sqInches >36 && sqInches <= 49) {
+	  //then highlight 49 sq inches
+	document.getElementById("49inches").style.background = bgHighlightColor;
+	myRow = "49";
+	}
+	else if (sqInches >46 && sqInches <= 64) {
+	  //then highlight 64 sq inches
+	document.getElementById("64inches").style.background = bgHighlightColor;
+	myRow = "64";
+	}
+	else if (sqInches >64 && sqInches <= 81) {
+	  //then highlight 81 sq inches
+	document.getElementById("81inches").style.background = bgHighlightColor;
+	myRow = "81";
+	}
+	else if (sqInches >81 && sqInches <= 100) {
+	  //then highlight 100 sq inches
+	document.getElementById("100inches").style.background = bgHighlightColor;
+	myRow = "100";
+	}
+	else if (sqInches >100 && sqInches <= 121) {
+	  //then highlight 121 sq inches
+	document.getElementById("121inches").style.background = bgHighlightColor;
+	myRow = "121";
+	}
+	else if (sqInches >121 && sqInches <= 144) {
+	  //then highlight 144 sq inches
+	document.getElementById("144inches").style.background = bgHighlightColor;
+	myRow = "144";
+	}
+	else if (sqInches >144 && sqInches <= 169) {
+	  //then highlight 169 sq inches
+	document.getElementById("169inches").style.background = bgHighlightColor;
+	myRow = "169";
+	}
+	else if (sqInches >169 && sqInches <= 196) {
+	  //then highlight 196 sq inches
+	document.getElementById("196inches").style.background = bgHighlightColor;
+	myRow = "196";
+	}
+	else if (sqInches >196 && sqInches <= 225) {
+	  //then highlight 225 sq inches
+	document.getElementById("225inches").style.background = bgHighlightColor;
+	myRow = "225";
+	}
+	else if (sqInches >225 && sqInches <= 256) {
+	  //then highlight 256 sq inches
+	document.getElementById("256inches").style.background = bgHighlightColor;
+	myRow = "256";
+	}
+	else if (sqInches >256 && sqInches <= 289) {
+	  //then highlight 289 sq inches
+	document.getElementById("289inches").style.background = bgHighlightColor;
+	myRow = "289";
+	}
+	else if (sqInches >289 && sqInches <= 324) {
+	  //then highlight 324 sq inches
+	document.getElementById("324inches").style.background = bgHighlightColor;
+	myRow = "324";
+	}
+	else if (sqInches >324 && sqInches <= 361) {
+	  //then highlight 361 sq inches
+	document.getElementById("361inches").style.background = bgHighlightColor;
+	myRow = "361";
+	}
+	else if (sqInches >361 && sqInches <= 400) {
+	  //then highlight 400 sq inches
+	document.getElementById("400inches").style.background = bgHighlightColor;
+	myRow = "400";
+	}
+	else if (sqInches >400 && sqInches <= 441) {
+	  //then highlight 441 sq inches
+	document.getElementById("441inches").style.background = bgHighlightColor;
+	myRow = "441";
+	}
+	else if (sqInches >441 && sqInches <= 484) {
+	  //then highlight 484 sq inches
+	document.getElementById("484inches").style.background = bgHighlightColor;
+	myRow = "484";
+	}
+	else if (sqInches >484 && sqInches <= 529) {
+	  //then highlight 529 sq inches
+	document.getElementById("529inches").style.background = bgHighlightColor;
+	myRow = "529";
+	}
+	else if (sqInches >529 && sqInches <= 576) {
+	  //then highlight 576 sq inches
+	document.getElementById("576inches").style.background = bgHighlightColor;
+	myRow = "576";
+	}
+	else if (sqInches >576 && sqInches <= 625) {
+	  //then highlight 625 sq inches
+	document.getElementById("625inches").style.background = bgHighlightColor;
+	myRow = "625";
+	}
+	else if (sqInches >625 && sqInches <= 676) {
+	  //then highlight 676 sq inches
+	document.getElementById("676inches").style.background = bgHighlightColor;
+	myRow = "676";
+	}
+	else if (sqInches >676 && sqInches <= 729) {
+	  //then highlight 729 sq inches
+	document.getElementById("729inches").style.background = bgHighlightColor;
+	myRow = "729";
+	}
+	else if (sqInches >729 && sqInches <= 784) {
+	  //then highlight 784 sq inches
+	document.getElementById("784inches").style.background = bgHighlightColor;
+	myRow = "784";
+	}
+	else if (sqInches >784 && sqInches <= 841) {
+	  //then highlight 841 sq inches
+	document.getElementById("841inches").style.background = bgHighlightColor;
+	myRow = "841";
+	}
+	else if (sqInches >841 && sqInches <= 900) {
+	  //then highlight 900 sq inches
+	document.getElementById("900inches").style.background = bgHighlightColor;
+	myRow = "900";
+	}
+	else if (sqInches >900 && sqInches <= 961) {
+	  //then highlight 961 sq inches
+	document.getElementById("961inches").style.background = bgHighlightColor;
+	myRow = "961";
+	}
+	else if (sqInches >961 && sqInches <= 1024) {
+	  //then highlight 1024 sq inches
+	document.getElementById("1024inches").style.background = bgHighlightColor;
+	myRow = "1024";
+	}
+	else if (sqInches >1024 && sqInches <= 1089) {
+	  //then highlight 1089 sq inches
+	document.getElementById("1089inches").style.background = bgHighlightColor;
+	myRow = "1089";
+	}
+	else if (sqInches >1089 && sqInches <= 1156) {
+	  //then highlight 1156 sq inches
+	document.getElementById("1156inches").style.background = bgHighlightColor;
+	myRow = "1156";
+	}
+	else if (sqInches >1156 && sqInches <= 1225) {
+	  //then highlight 1225 sq inches
+	document.getElementById("1225inches").style.background = bgHighlightColor;
+	myRow = "1225";
+	}
+	else if (sqInches >1225 && sqInches <= 1296) {
+	  //then highlight 1296 sq inches
+	document.getElementById("1296inches").style.background = bgHighlightColor;
+	myRow = "1296";
+	}
+	
+	return myRow;
+}
+// clear highlighted rows
+function clearHighlight(){
+	var elementId = 0;
+	var elementSuffix = "inches";
+	var elementIdName = "";
+	
+	for (i=2; i <=36; i++) {
+	elementId = i*i;
+	elementIdName = String(elementId) + elementSuffix;
+	document.getElementById(elementIdName).style.background = "#ffffff";
+	}
+
+}
+
+</script>
+
+
+
+<div style="overflow-x:auto;">
+	<table id="PriceList">
+	  <tr style="background-color:#a1c739;">
+		<th> Square Inches</th>
+		<th>&lt; 10 </th>
+		<th>10-19</th>
+		<th>20-29</th>
+		<th>30-49</th>
+		<th>50-99</th>
+		<th>100-249</th>
+		<th>250-499</th>
+		<th>500-999</th>
+		<th>1000-1999</th>
+		<th>2000-4999</th>
+		<th>5000-9999</th>
+		<th>10000+</th>	
+	  </tr>
+	  <tr id = "4inches"> <!-- 4 in. sq. -->
+		<td>4 in <sup>2</sup></td>
+		<td id = "4x1">$2.60</td> <!-- < 10 -->
+		<td id = "4x2">$1.63</td> <!-- 10-19 -->
+		<td id = "4x3">$0.98</td> <!-- 20-29 -->
+		<td id = "4x4">$0.85</td> <!-- 30-49 -->
+		<td id = "4x5">$0.61</td> <!-- 50-99 -->
+		<td id = "4x6">$0.36</td> <!-- 100-249 -->
+		<td id = "4x7">$0.23</td> <!-- 250-499 -->
+		<td id = "4x8">$0.14</td> <!-- 500-999 -->
+		<td id = "4x9">$0.10</td> <!-- 1000-1999 -->
+		<td id = "4x10">$0.08</td> <!-- 2000-4999 -->
+		<td id = "4x11">$0.08</td> <!-- 5000-9999 -->
+		<td id = "4x12">$0.07</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "9inches"> <!-- 9 in. sq. -->
+		<td>9 in <sup>2</sup></td>
+		<td id = "9x1">$3.25</td> <!-- < 10 -->
+		<td id = "9x2">$1.95</td> <!-- 10-19 -->
+		<td id = "9x3">$1.30</td> <!-- 20-29 -->
+		<td id = "9x4">$1.04</td> <!-- 30-49 -->
+		<td id = "9x5">$0.69</td> <!-- 50-99 -->
+		<td id = "9x6">$0.42</td> <!-- 100-249 -->
+		<td id = "9x7">$0.26</td> <!-- 250-499 -->
+		<td id = "9x8">$0.21</td> <!-- 500-999 -->
+		<td id = "9x9">$0.18</td> <!-- 1000-1999 -->
+		<td id = "9x10">$0.17</td> <!-- 2000-4999 -->
+		<td id = "9x11">$0.16</td> <!-- 5000-9999 -->
+		<td id = "9x12">$0.15</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "16inches"> <!-- 16 in. sq. -->
+		<td>16 in <sup>2</sup></td>
+		<td id = "16x1">$3.90</td> <!-- < 10 -->
+		<td id = "16x2">$2.28</td> <!-- 10-19 -->
+		<td id = "16x3">$1.56</td> <!-- 20-29 -->
+		<td id = "16x4">$1.17</td> <!-- 30-49 -->
+		<td id = "16x5">$0.86</td> <!-- 50-99 -->
+		<td id = "16x6">$0.52</td> <!-- 100-249 -->
+		<td id = "16x7">$0.42</td> <!-- 250-499 -->
+		<td id = "16x8">$0.36</td> <!-- 500-999 -->
+		<td id = "16x9">$0.31</td> <!-- 1000-1999 -->
+		<td id = "16x10">$0.29</td> <!-- 2000-4999 -->
+		<td id = "16x11">$0.26</td> <!-- 5000-9999 -->
+		<td id = "16x12">$0.23</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "25inches"> <!-- 25 in. sq. -->
+		<td>25 in <sup>2</sup></td>
+		<td id = "25x1">$4.55</td> <!-- < 10 -->
+		<td id = "25x2">$3.25</td> <!-- 10-19 -->
+		<td id = "25x3">$1.79</td> <!-- 20-29 -->
+		<td id = "25x4">$1.30</td> <!-- 30-49 -->
+		<td id = "25x5">$0.98</td> <!-- 50-99 -->
+		<td id = "25x6">$0.65</td> <!-- 100-249 -->
+		<td id = "25x7">$0.60</td> <!-- 250-499 -->
+		<td id = "25x8">$0.57</td> <!-- 500-999 -->
+		<td id = "25x9">$0.49</td> <!-- 1000-1999 -->
+		<td id = "25x10">$0.40</td> <!-- 2000-4999 -->
+		<td id = "25x11">$0.33</td> <!-- 5000-9999 -->
+		<td id = "25x12">$0.27</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "36inches"> <!-- 36 in. sq. -->
+		<td>36 in <sup>2</sup></td>
+		<td id = "36x1">$5.20</td> <!-- < 10 -->
+		<td id = "36x2">$3.59</td> <!-- 10-19 -->
+		<td id = "36x3">$2.57</td> <!-- 20-29 -->
+		<td id = "36x4">$1.87</td> <!-- 30-49 -->
+		<td id = "36x5">$1.40</td> <!-- 50-99 -->
+		<td id = "36x6">$0.94</td> <!-- 100-249 -->
+		<td id = "36x7">$0.86</td> <!-- 250-499 -->
+		<td id = "36x8">$0.82</td> <!-- 500-999 -->
+		<td id = "36x9">$0.70</td> <!-- 1000-1999 -->
+		<td id = "36x10">$0.54</td> <!-- 2000-4999 -->
+		<td id = "36x11">$0.47</td> <!-- 5000-9999 -->
+		<td id = "36x12">$0.34</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "49inches"> <!-- 49 in. sq. -->
+		<td>49 in <sup>2</sup></td>
+		<td id = "49x1">$5.85</td> <!-- < 10 -->
+		<td id = "49x2">$4.37</td> <!-- 10-19 -->
+		<td id = "49x3">$3.50</td> <!-- 20-29 -->
+		<td id = "49x4">$2.55</td> <!-- 30-49 -->
+		<td id = "49x5">$1.91</td> <!-- 50-99 -->
+		<td id = "49x6">$1.27</td> <!-- 100-249 -->
+		<td id = "49x7">$1.18</td> <!-- 250-499 -->
+		<td id = "49x8">$1.12</td> <!-- 500-999 -->
+		<td id = "49x9">$0.96</td> <!-- 1000-1999 -->
+		<td id = "49x10">$0.72</td> <!-- 2000-4999 -->
+		<td id = "49x11">$0.64</td> <!-- 5000-9999 -->
+		<td id = "49x12">$0.42</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "64inches"> <!-- 64 in. sq. -->
+		<td>64 in <sup>2</sup></td>
+		<td id = "64x1">$6.50</td> <!-- < 10 -->
+		<td id = "64x2">$5.07</td> <!-- 10-19 -->
+		<td id = "64x3">$4.58</td> <!-- 20-29 -->
+		<td id = "64x4">$3.33</td> <!-- 30-49 -->
+		<td id = "64x5">$2.50</td> <!-- 50-99 -->
+		<td id = "64x6">$1.66</td> <!-- 100-249 -->
+		<td id = "64x7">$1.54</td> <!-- 250-499 -->
+		<td id = "64x8">$1.46</td> <!-- 500-999 -->
+		<td id = "64x9">$1.25</td> <!-- 1000-1999 -->
+		<td id = "64x10">$0.96</td> <!-- 2000-4999 -->
+		<td id = "64x11">$0.83</td> <!-- 5000-9999 -->
+		<td id = "64x12">$0.51</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "81inches"> <!-- 81 in. sq. -->
+		<td>81 in <sup>2</sup></td>
+		<td id = "81x1">$7.15</td> <!-- < 10 -->
+		<td id = "81x2">$5.72</td> <!-- 10-19 -->
+		<td id = "81x3">$4.65</td> <!-- 20-29 -->
+		<td id = "81x4">$4.21</td> <!-- 30-49 -->
+		<td id = "81x5">$3.16</td> <!-- 50-99 -->
+		<td id = "81x6">$2.11</td> <!-- 100-249 -->
+		<td id = "81x7">$1.95</td> <!-- 250-499 -->
+		<td id = "81x8">$1.85</td> <!-- 500-999 -->
+		<td id = "81x9">$1.58</td> <!-- 1000-1999 -->
+		<td id = "81x10">$1.19</td> <!-- 2000-4999 -->
+		<td id = "81x11">$1.05</td> <!-- 5000-9999 -->
+		<td id = "81x12">$0.59</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "100inches"> <!-- 100 in. sq. -->
+		<td>100 in <sup>2</sup></td>
+		<td id = "100x1">$7.80</td> <!-- < 10 -->
+		<td id = "100x2">$6.24</td> <!-- 10-19 -->
+		<td id = "100x3">$5.46</td> <!-- 20-29 -->
+		<td id = "100x4">$4.68</td> <!-- 30-49 -->
+		<td id = "100x5">$3.90</td> <!-- 50-99 -->
+		<td id = "100x6">$3.12</td> <!-- 100-249 -->
+		<td id = "100x7">$2.41</td> <!-- 250-499 -->
+		<td id = "100x8">$2.28</td> <!-- 500-999 -->
+		<td id = "100x9">$1.95</td> <!-- 1000-1999 -->
+		<td id = "100x10">$1.63</td> <!-- 2000-4999 -->
+		<td id = "100x11">$1.63</td> <!-- 5000-9999 -->
+		<td id = "100x12">$1.63</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "121inches"> <!-- 121 in. sq. -->
+		<td>121 in <sup>2</sup></td>
+		<td id = "121x1">$8.45</td> <!-- < 10 -->
+		<td id = "121x2">$6.76</td> <!-- 10-19 -->
+		<td id = "121x3">$5.92</td> <!-- 20-29 -->
+		<td id = "121x4">$5.07</td> <!-- 30-49 -->
+		<td id = "121x5">$4.23</td> <!-- 50-99 -->
+		<td id = "121x6">$3.38</td> <!-- 100-249 -->
+		<td id = "121x7">$2.91</td> <!-- 250-499 -->
+		<td id = "121x8">$2.76</td> <!-- 500-999 -->
+		<td id = "121x9">$2.36</td> <!-- 1000-1999 -->
+		<td id = "121x10">$1.95</td> <!-- 2000-4999 -->
+		<td id = "121x11">$1.95</td> <!-- 5000-9999 -->
+		<td id = "121x12">$1.95</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "144inches"> <!-- 144 in. sq. -->
+		<td>144 in <sup>2</sup></td>
+		<td id = "144x1">$9.10</td> <!-- < 10 -->
+		<td id = "144x2">$7.28</td> <!-- 10-19 -->
+		<td id = "144x3">$6.37</td> <!-- 20-29 -->
+		<td id = "144x4">$5.46</td> <!-- 30-49 -->
+		<td id = "144x5">$4.55</td> <!-- 50-99 -->
+		<td id = "144x6">$3.64</td> <!-- 100-249 -->
+		<td id = "144x7">$3.46</td> <!-- 250-499 -->
+		<td id = "144x8">$3.28</td> <!-- 500-999 -->
+		<td id = "144x9">$2.81</td> <!-- 1000-1999 -->
+		<td id = "144x10">$2.34</td> <!-- 2000-4999 -->
+		<td id = "144x11">$2.34</td> <!-- 5000-9999 -->
+		<td id = "144x12">$2.34</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "169inches"> <!-- 169 in. sq. -->
+		<td>169 in <sup>2</sup></td>
+		<td id = "169x1">$9.75</td> <!-- < 10 -->
+		<td id = "169x2">$7.80</td> <!-- 10-19 -->
+		<td id = "169x3">$6.83</td> <!-- 20-29 -->
+		<td id = "169x4">$5.83</td> <!-- 30-49 -->
+		<td id = "169x5">$4.88</td> <!-- 50-99 -->
+		<td id = "169x6">$3.90</td> <!-- 100-249 -->
+		<td id = "169x7">$3.41</td> <!-- 250-499 -->
+		<td id = "169x8">$3.22</td> <!-- 500-999 -->
+		<td id = "169x9">$3.12</td> <!-- 1000-1999 -->
+		<td id = "169x10">$2.93</td> <!-- 2000-4999 -->
+		<td id = "169x11">$2.93</td> <!-- 5000-9999 -->
+		<td id = "169x12">$2.93</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "196inches"> <!-- 196 in. sq. -->
+		<td>196 in <sup>2</sup></td>
+		<td id = "196x1">$10.40</td> <!-- < 10 -->
+		<td id = "196x2">$8.32</td> <!-- 10-19 -->
+		<td id = "196x3">$7.28</td> <!-- 20-29 -->
+		<td id = "196x4">$6.24</td> <!-- 30-49 -->
+		<td id = "196x5">$5.20</td> <!-- 50-99 -->
+		<td id = "196x6">$4.16</td> <!-- 100-249 -->
+		<td id = "196x7">$3.64</td> <!-- 250-499 -->
+		<td id = "196x8">$3.43</td> <!-- 500-999 -->
+		<td id = "196x9">$3.33</td> <!-- 1000-1999 -->
+		<td id = "196x10">$3.12</td> <!-- 2000-4999 -->
+		<td id = "196x11">$3.12</td> <!-- 5000-9999 -->
+		<td id = "196x12">$3.12</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "225inches"> <!-- 225 in. sq. -->
+		<td>225 in <sup>2</sup></td>
+		<td id = "225x1">$11.05</td> <!-- < 10 -->
+		<td id = "225x2">$8.84</td> <!-- 10-19 -->
+		<td id = "225x3">$7.74</td> <!-- 20-29 -->
+		<td id = "225x4">$6.63</td> <!-- 30-49 -->
+		<td id = "225x5">$5.53</td> <!-- 50-99 -->
+		<td id = "225x6">$4.42</td> <!-- 100-249 -->
+		<td id = "225x7">$3.87</td> <!-- 250-499 -->
+		<td id = "225x8">$3.65</td> <!-- 500-999 -->
+		<td id = "225x9">$3.54</td> <!-- 1000-1999 -->
+		<td id = "225x10">$3.32</td> <!-- 2000-4999 -->
+		<td id = "225x11">$3.32</td> <!-- 5000-9999 -->
+		<td id = "225x12">$3.32</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "256inches"> <!-- 256 in. sq. -->
+		<td>256 in <sup>2</sup></td>
+		<td id = "256x1">$11.70</td> <!-- < 10 -->
+		<td id = "256x2">$9.36</td> <!-- 10-19 -->
+		<td id = "256x3">$8.19</td> <!-- 20-29 -->
+		<td id = "256x4">$7.02</td> <!-- 30-49 -->
+		<td id = "256x5">$5.85</td> <!-- 50-99 -->
+		<td id = "256x6">$4.68</td> <!-- 100-249 -->
+		<td id = "256x7">$4.10</td> <!-- 250-499 -->
+		<td id = "256x8">$3.86</td> <!-- 500-999 -->
+		<td id = "256x9">$3.74</td> <!-- 1000-1999 -->
+		<td id = "256x10">$3.51</td> <!-- 2000-4999 -->
+		<td id = "256x11">$3.51</td> <!-- 5000-9999 -->
+		<td id = "256x12">$3.51</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "289inches"> <!-- 289 in. sq. -->
+		<td>289 in <sup>2</sup></td>
+		<td id = "289x1">$12.35</td> <!-- < 10 -->
+		<td id = "289x2">$9.88</td> <!-- 10-19 -->
+		<td id = "289x3">$8.65</td> <!-- 20-29 -->
+		<td id = "289x4">$7.41</td> <!-- 30-49 -->
+		<td id = "289x5">$6.18</td> <!-- 50-99 -->
+		<td id = "289x6">$4.94</td> <!-- 100-249 -->
+		<td id = "289x7">$4.92</td> <!-- 250-499 -->
+		<td id = "289x8">$4.08</td> <!-- 500-999 -->
+		<td id = "289x9">$3.95</td> <!-- 1000-1999 -->
+		<td id = "289x10">$3.71</td> <!-- 2000-4999 -->
+		<td id = "289x11">$3.71</td> <!-- 5000-9999 -->
+		<td id = "289x12">$3.71</td> <!-- 10000+ -->
+
+	  </tr>
+	  <tr id = "324inches"> <!-- 324 in. sq. -->
+		<td>324 in <sup>2</sup></td>
+		<td id = "324x1">$13.00</td> <!-- < 10 -->
+		<td id = "324x2">$10.40</td> <!-- 10-19 -->
+		<td id = "324x3">$9.10</td> <!-- 20-29 -->
+		<td id = "324x4">$7.80</td> <!-- 30-49 -->
+		<td id = "324x5">$6.50</td> <!-- 50-99 -->
+		<td id = "324x6">$5.20</td> <!-- 100-249 -->
+		<td id = "324x7">$4.55</td> <!-- 250-499 -->
+		<td id = "324x8">$4.29</td> <!-- 500-999 -->
+		<td id = "324x9">$4.16</td> <!-- 1000-1999 -->
+		<td id = "324x10">$3.90</td> <!-- 2000-4999 -->
+		<td id = "324x11">$3.90</td> <!-- 5000-9999 -->
+		<td id = "324x12">$3.90</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "361inches"> <!-- 361 in. sq. -->
+		<td>361 in <sup>2</sup></td>
+		<td id = "361x1">$13.65</td> <!-- < 10 -->
+		<td id = "361x2">$10.92</td> <!-- 10-19 -->
+		<td id = "361x3">$9.56</td> <!-- 20-29 -->
+		<td id = "361x4">$8.19</td> <!-- 30-49 -->
+		<td id = "361x5">$6.83</td> <!-- 50-99 -->
+		<td id = "361x6">$5.46</td> <!-- 100-249 -->
+		<td id = "361x7">$4.78</td> <!-- 250-499 -->
+		<td id = "361x8">$4.50</td> <!-- 500-999 -->
+		<td id = "361x9">$4.37</td> <!-- 1000-1999 -->
+		<td id = "361x10">$4.10</td> <!-- 2000-4999 -->
+		<td id = "361x11">$4.10</td> <!-- 5000-9999 -->
+		<td id = "361x12">$4.10</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "400inches"> <!-- 400 in. sq. -->
+		<td>400 in <sup>2</sup></td>
+		<td id = "400x1">$14.30</td> <!-- < 10 -->
+		<td id = "400x2">$11.44</td> <!-- 10-19 -->
+		<td id = "400x3">$10.01</td> <!-- 20-29 -->
+		<td id = "400x4">$8.58</td> <!-- 30-49 -->
+		<td id = "400x5">$7.15</td> <!-- 50-99 -->
+		<td id = "400x6">$5.72</td> <!-- 100-249 -->
+		<td id = "400x7">$5.01</td> <!-- 250-499 -->
+		<td id = "400x8">$4.72</td> <!-- 500-999 -->
+		<td id = "400x9">$4.58</td> <!-- 1000-1999 -->
+		<td id = "400x10">$4.29</td> <!-- 2000-4999 -->
+		<td id = "400x11">$4.29</td> <!-- 5000-9999 -->
+		<td id = "400x12">$4.29</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "441inches"> <!-- 441 in. sq. -->
+		<td>441 in <sup>2</sup></td>
+		<td id = "441x1">$14.95</td> <!-- < 10 -->
+		<td id = "441x2">$11.96</td> <!-- 10-19 -->
+		<td id = "441x3">$10.47</td> <!-- 20-29 -->
+		<td id = "441x4">$8.97</td> <!-- 30-49 -->
+		<td id = "441x5">$7.48</td> <!-- 50-99 -->
+		<td id = "441x6">$5.98</td> <!-- 100-249 -->
+		<td id = "441x7">$5.23</td> <!-- 250-499 -->
+		<td id = "441x8">$4.93</td> <!-- 500-999 -->
+		<td id = "441x9">$4.78</td> <!-- 1000-1999 -->
+		<td id = "441x10">$4.49</td> <!-- 2000-4999 -->
+		<td id = "441x11">$4.49</td> <!-- 5000-9999 -->
+		<td id = "441x12">$4.49</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "484inches"> <!-- 484 in. sq. -->
+		<td>484 in <sup>2</sup></td>
+		<td id = "484x1">$15.60</td> <!-- < 10 -->
+		<td id = "484x2">$12.48</td> <!-- 10-19 -->
+		<td id = "484x3">$10.92</td> <!-- 20-29 -->
+		<td id = "484x4">$9.36</td> <!-- 30-49 -->
+		<td id = "484x5">$7.80</td> <!-- 50-99 -->
+		<td id = "484x6">$6.24</td> <!-- 100-249 -->
+		<td id = "484x7">$5.46</td> <!-- 250-499 -->
+		<td id = "484x8">$5.15</td> <!-- 500-999 -->
+		<td id = "484x9">$4.99</td> <!-- 1000-1999 -->
+		<td id = "484x10">$4.68</td> <!-- 2000-4999 -->
+		<td id = "484x11">$4.68</td> <!-- 5000-9999 -->
+		<td id = "484x12">$4.68</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "529inches"> <!-- 529 in. sq. -->
+		<td>529 in <sup>2</sup></td>
+		<td id = "529x1">$16.25</td> <!-- < 10 -->
+		<td id = "529x2">$13.00</td> <!-- 10-19 -->
+		<td id = "529x3">$11.38</td> <!-- 20-29 -->
+		<td id = "529x4">$9.75</td> <!-- 30-49 -->
+		<td id = "529x5">$8.13</td> <!-- 50-99 -->
+		<td id = "529x6">$6.50</td> <!-- 100-249 -->
+		<td id = "529x7">$5.69</td> <!-- 250-499 -->
+		<td id = "529x8">$5.36</td> <!-- 500-999 -->
+		<td id = "529x9">$5.20</td> <!-- 1000-1999 -->
+		<td id = "529x10">$4.88</td> <!-- 2000-4999 -->
+		<td id = "529x11">$4.88</td> <!-- 5000-9999 -->
+		<td id = "529x12">$4.88</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "576inches"> <!-- 576 in. sq. -->
+		<td>576 in <sup>2</sup></td>
+		<td id = "576x1">$16.90</td> <!-- < 10 -->
+		<td id = "576x2">$13.52</td> <!-- 10-19 -->
+		<td id = "576x3">$11.83</td> <!-- 20-29 -->
+		<td id = "576x4">$10.14</td> <!-- 30-49 -->
+		<td id = "576x5">$8.45</td> <!-- 50-99 -->
+		<td id = "576x6">$6.76</td> <!-- 100-249 -->
+		<td id = "576x7">$5.92</td> <!-- 250-499 -->
+		<td id = "576x8">$5.58</td> <!-- 500-999 -->
+		<td id = "576x9">$5.41</td> <!-- 1000-1999 -->
+		<td id = "576x10">$5.07</td> <!-- 2000-4999 -->
+		<td id = "576x11">$5.07</td> <!-- 5000-9999 -->
+		<td id = "576x12">$5.07</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "625inches"> <!-- 625 in. sq. -->
+		<td>625 in <sup>2</sup></td>
+		<td id = "625x1">$17.55</td> <!-- < 10 -->
+		<td id = "625x2">$14.04</td> <!-- 10-19 -->
+		<td id = "625x3">$12.29</td> <!-- 20-29 -->
+		<td id = "625x4">$10.53</td> <!-- 30-49 -->
+		<td id = "625x5">$8.78</td> <!-- 50-99 -->
+		<td id = "625x6">$7.02</td> <!-- 100-249 -->
+		<td id = "625x7">$6.14</td> <!-- 250-499 -->
+		<td id = "625x8">$5.79</td> <!-- 500-999 -->
+		<td id = "625x9">$5.62</td> <!-- 1000-1999 -->
+		<td id = "625x10">$5.27</td> <!-- 2000-4999 -->
+		<td id = "625x11">$5.27</td> <!-- 5000-9999 -->
+		<td id = "625x12">$5.27</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "676inches"> <!-- 676 in. sq. -->
+		<td>676 in <sup>2</sup></td>
+		<td id = "676x1">$18.20</td> <!-- < 10 -->
+		<td id = "676x2">$14.56</td> <!-- 10-19 -->
+		<td id = "676x3">$12.74</td> <!-- 20-29 -->
+		<td id = "676x4">$10.92</td> <!-- 30-49 -->
+		<td id = "676x5">$9.10</td> <!-- 50-99 -->
+		<td id = "676x6">$7.28</td> <!-- 100-249 -->
+		<td id = "676x7">$6.37</td> <!-- 250-499 -->
+		<td id = "676x8">$6.01</td> <!-- 500-999 -->
+		<td id = "676x9">$5.82</td> <!-- 1000-1999 -->
+		<td id = "676x10">$5.46</td> <!-- 2000-4999 -->
+		<td id = "676x11">$5.46</td> <!-- 5000-9999 -->
+		<td id = "676x12">$5.46</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "729inches"> <!-- 729 in. sq. -->
+		<td>729 in <sup>2</sup></td>
+		<td id = "729x1">$18.85</td> <!-- < 10 -->
+		<td id = "729x2">$15.08</td> <!-- 10-19 -->
+		<td id = "729x3">$13.20</td> <!-- 20-29 -->
+		<td id = "729x4">$11.31</td> <!-- 30-49 -->
+		<td id = "729x5">$9.43</td> <!-- 50-99 -->
+		<td id = "729x6">$7.54</td> <!-- 100-249 -->
+		<td id = "729x7">$6.60</td> <!-- 250-499 -->
+		<td id = "729x8">$6.22</td> <!-- 500-999 -->
+		<td id = "729x9">$6.03</td> <!-- 1000-1999 -->
+		<td id = "729x10">$5.66</td> <!-- 2000-4999 -->
+		<td id = "729x11">$5.66</td> <!-- 5000-9999 -->
+		<td id = "729x12">$5.66</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "784inches"> <!-- 784 in. sq. -->
+		<td>784 in <sup>2</sup></td>
+		<td id = "784x1">$19.50</td> <!-- < 10 -->
+		<td id = "784x2">$15.60</td> <!-- 10-19 -->
+		<td id = "784x3">$13.65</td> <!-- 20-29 -->
+		<td id = "784x4">$11.70</td> <!-- 30-49 -->
+		<td id = "784x5">$9.75</td> <!-- 50-99 -->
+		<td id = "784x6">$7.80</td> <!-- 100-249 -->
+		<td id = "784x7">$6.83</td> <!-- 250-499 -->
+		<td id = "784x8">$6.44</td> <!-- 500-999 -->
+		<td id = "784x9">$6.24</td> <!-- 1000-1999 -->
+		<td id = "784x10">$5.85</td> <!-- 2000-4999 -->
+		<td id = "784x11">$5.85</td> <!-- 5000-9999 -->
+		<td id = "784x12">$5.85</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "841inches"> <!-- 841 in. sq. -->
+		<td>841 in <sup>2</sup></td>
+		<td id = "841x1">$20.15</td> <!-- < 10 -->
+		<td id = "841x2">$16.12</td> <!-- 10-19 -->
+		<td id = "841x3">$14.11</td> <!-- 20-29 -->
+		<td id = "841x4">$12.09</td> <!-- 30-49 -->
+		<td id = "841x5">$10.08</td> <!-- 50-99 -->
+		<td id = "841x6">$8.06</td> <!-- 100-249 -->
+		<td id = "841x7">$7.05</td> <!-- 250-499 -->
+		<td id = "841x8">$6.65</td> <!-- 500-999 -->
+		<td id = "841x9">$6.45</td> <!-- 1000-1999 -->
+		<td id = "841x10">$6.05</td> <!-- 2000-4999 -->
+		<td id = "841x11">$6.05</td> <!-- 5000-9999 -->
+		<td id = "841x12">$6.05</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "900inches"> <!-- 900 in. sq. -->
+		<td>900 in <sup>2</sup></td>
+		<td id = "900x1">$20.80</td> <!-- < 10 -->
+		<td id = "900x2">$16.64</td> <!-- 10-19 -->
+		<td id = "900x3">$14.56</td> <!-- 20-29 -->
+		<td id = "900x4">$12.48</td> <!-- 30-49 -->
+		<td id = "900x5">$10.40</td> <!-- 50-99 -->
+		<td id = "900x6">$8.32</td> <!-- 100-249 -->
+		<td id = "900x7">$7.28</td> <!-- 250-499 -->
+		<td id = "900x8">$6.86</td> <!-- 500-999 -->
+		<td id = "900x9">$6.66</td> <!-- 1000-1999 -->
+		<td id = "900x10">$6.24</td> <!-- 2000-4999 -->
+		<td id = "900x11">$6.24</td> <!-- 5000-9999 -->
+		<td id = "900x12">$6.24</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "961inches"> <!-- 961 in. sq. -->
+		<td>961 in <sup>2</sup></td>
+		<td id = "961x1">$21.45</td> <!-- < 10 -->
+		<td id = "961x2">$17.16</td> <!-- 10-19 -->
+		<td id = "961x3">$15.02</td> <!-- 20-29 -->
+		<td id = "961x4">$12.87</td> <!-- 30-49 -->
+		<td id = "961x5">$10.73</td> <!-- 50-99 -->
+		<td id = "961x6">$8.58</td> <!-- 100-249 -->
+		<td id = "961x7">$7.51</td> <!-- 250-499 -->
+		<td id = "961x8">$7.08</td> <!-- 500-999 -->
+		<td id = "961x9">$6.86</td> <!-- 1000-1999 -->
+		<td id = "961x10">$6.44</td> <!-- 2000-4999 -->
+		<td id = "961x11">$6.44</td> <!-- 5000-9999 -->
+		<td id = "961x12">$6.44</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "1024inches"> <!-- 1024 in. sq. -->
+		<td>1024 in <sup>2</sup></td>
+		<td id = "1024x1">$22.10</td> <!-- < 10 -->
+		<td id = "1024x2">$17.68</td> <!-- 10-19 -->
+		<td id = "1024x3">$15.47</td> <!-- 20-29 -->
+		<td id = "1024x4">$13.26</td> <!-- 30-49 -->
+		<td id = "1024x5">$11.05</td> <!-- 50-99 -->
+		<td id = "1024x6">$8.84</td> <!-- 100-249 -->
+		<td id = "1024x7">$7.74</td> <!-- 250-499 -->
+		<td id = "1024x8">$7.29</td> <!-- 500-999 -->
+		<td id = "1024x9">$7.07</td> <!-- 1000-1999 -->
+		<td id = "1024x10">$6.63</td> <!-- 2000-4999 -->
+		<td id = "1024x11">$6.63</td> <!-- 5000-9999 -->
+		<td id = "1024x12">$6.63</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "1089inches"> <!-- 1089 in. sq. -->
+		<td>1089 in <sup>2</sup></td>
+		<td id = "1089x1">$22.75</td> <!-- < 10 -->
+		<td id = "1089x2">$18.20</td> <!-- 10-19 -->
+		<td id = "1089x3">$15.93</td> <!-- 20-29 -->
+		<td id = "1089x4">$13.65</td> <!-- 30-49 -->
+		<td id = "1089x5">$11.38</td> <!-- 50-99 -->
+		<td id = "1089x6">$9.10</td> <!-- 100-249 -->
+		<td id = "1089x7">$7.96</td> <!-- 250-499 -->
+		<td id = "1089x8">$7.51</td> <!-- 500-999 -->
+		<td id = "1089x9">$7.28</td> <!-- 1000-1999 -->
+		<td id = "1089x10">$6.83</td> <!-- 2000-4999 -->
+		<td id = "1089x11">$6.83</td> <!-- 5000-9999 -->
+		<td id = "1089x12">$6.83</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "1156inches"> <!-- 1156 in. sq. -->
+		<td>1156 in <sup>2</sup></td>
+		<td id = "1156x1">$23.40</td> <!-- < 10 -->
+		<td id = "1156x2">$18.72</td> <!-- 10-19 -->
+		<td id = "1156x3">$16.38</td> <!-- 20-29 -->
+		<td id = "1156x4">$14.04</td> <!-- 30-49 -->
+		<td id = "1156x5">$11.70</td> <!-- 50-99 -->
+		<td id = "1156x6">$9.36</td> <!-- 100-249 -->
+		<td id = "1156x7">$8.19</td> <!-- 250-499 -->
+		<td id = "1156x8">$7.72</td> <!-- 500-999 -->
+		<td id = "1156x9">$7.49</td> <!-- 1000-1999 -->
+		<td id = "1156x10">$7.02</td> <!-- 2000-4999 -->
+		<td id = "1156x11">$7.02</td> <!-- 5000-9999 -->
+		<td id = "1156x12">$7.02</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "1225inches"> <!-- 1225 in. sq. -->
+		<td>1225 in <sup>2</sup></td>
+		<td id = "1225x1">$24.05</td> <!-- < 10 -->
+		<td id = "1225x2">$19.24</td> <!-- 10-19 -->
+		<td id = "1225x3">$16.84</td> <!-- 20-29 -->
+		<td id = "1225x4">$14.43</td> <!-- 30-49 -->
+		<td id = "1225x5">$12.03</td> <!-- 50-99 -->
+		<td id = "1225x6">$9.62</td> <!-- 100-249 -->
+		<td id = "1225x7">$8.42</td> <!-- 250-499 -->
+		<td id = "1225x8">$7.94</td> <!-- 500-999 -->
+		<td id = "1225x9">$7.70</td> <!-- 1000-1999 -->
+		<td id = "1225x10">$7.22</td> <!-- 2000-4999 -->
+		<td id = "1225x11">$7.22</td> <!-- 5000-9999 -->
+		<td id = "1225x12">$7.22</td> <!-- 10000+ -->
+	  </tr>
+	  <tr id = "1296inches"> <!-- 1296 in. sq. -->
+		<td>1296 in <sup>2</sup></td>
+		<td id = "1296x1">$24.70</td> <!-- < 10 -->
+		<td id = "1296x2">$19.76</td> <!-- 10-19 -->
+		<td id = "1296x3">$17.29</td> <!-- 20-29 -->
+		<td id = "1296x4">$14.82</td> <!-- 30-49 -->
+		<td id = "1296x5">$12.35</td> <!-- 50-99 -->
+		<td id = "1296x6">$9.88</td> <!-- 100-249 -->
+		<td id = "1296x7">$8.65</td> <!-- 250-499 -->
+		<td id = "1296x8">$8.15</td> <!-- 500-999 -->
+		<td id = "1296x9">$7.90</td> <!-- 1000-1999 -->
+		<td id = "1296x10">$7.41</td> <!-- 2000-4999 -->
+		<td id = "1296x11">$7.41</td> <!-- 5000-9999 -->
+		<td id = "1296x12">$7.41</td> <!-- 10000+ -->
+	  </tr>
+	</table>
+</div>
+
+
+</body>
+</html> 
