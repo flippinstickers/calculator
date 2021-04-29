@@ -25,7 +25,7 @@ body{
 }
 
 .container{
-    width:80%;
+    width:320px;
     margin:auto;
 	background-image:url('../images/FlippinStickers_logo.png');
 	background-position:20px 20px;
